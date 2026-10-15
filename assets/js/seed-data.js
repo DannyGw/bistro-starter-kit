@@ -314,12 +314,12 @@
 
     /** Ambiance gallery tiles — pure CSS gradients, so nothing 404s offline. */
     var GALLERY = [
-        { id: 'gl-01', caption: 'The dining room', gradient: 'linear-gradient(135deg,#f59e0b,#b45309)' },
-        { id: 'gl-02', caption: 'Chef\u2019s counter', gradient: 'linear-gradient(135deg,#14b8a6,#0f766e)' },
-        { id: 'gl-03', caption: 'Terrace at dusk', gradient: 'linear-gradient(135deg,#6366f1,#312e81)' },
-        { id: 'gl-04', caption: 'Private cellar', gradient: 'linear-gradient(135deg,#be123c,#7f1d1d)' },
-        { id: 'gl-05', caption: 'Open kitchen', gradient: 'linear-gradient(135deg,#f97316,#c2410c)' },
-        { id: 'gl-06', caption: 'Sunday brunch', gradient: 'linear-gradient(135deg,#84cc16,#3f6212)' }
+        { id: 'gl-01', caption: 'The dining room', tone: 'gallery-tone-1' },
+        { id: 'gl-02', caption: 'Chef\u2019s counter', tone: 'gallery-tone-2' },
+        { id: 'gl-03', caption: 'Terrace at dusk', tone: 'gallery-tone-3' },
+        { id: 'gl-04', caption: 'Private cellar', tone: 'gallery-tone-4' },
+        { id: 'gl-05', caption: 'Open kitchen', tone: 'gallery-tone-5' },
+        { id: 'gl-06', caption: 'Sunday brunch', tone: 'gallery-tone-6' }
     ];
 
     Bistro.Seed = {

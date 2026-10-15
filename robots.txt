@@ -1,0 +1,13 @@
+# Bistro Starter Kit
+# ---------------------------------------------------------------------------
+# The guest-facing site is crawlable; the staff dashboard and the 404 helper
+# carry their own `noindex` meta tags as well, belt and braces.
+# ---------------------------------------------------------------------------
+
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /404.html
+
+# Set this to your production origin once the domain is live, e.g.
+# Sitemap: https://bistro.example/sitemap.xml

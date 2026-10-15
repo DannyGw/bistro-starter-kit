@@ -21,44 +21,17 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
         rel="stylesheet" />
 
-    <!-- Configuration must load before Tailwind so the palette can be derived. -->
+    <!-- Runtime configuration (brand, fees, payment gateways, backend). -->
     <script src="config.js"></script>
 
-    <!-- Tailwind Play CDN. For production, compile Tailwind locally instead. -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: 'var(--brand)',
-                        accent: 'var(--accent)'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        display: ['"Playfair Display"', 'Georgia', 'serif']
-                    },
-                    maxWidth: { shell: '1200px' }
-                }
-            }
-        };
-    </script>
-
+    <!-- Compiled Tailwind utilities, then the hand-written layers. Rebuild the
+         first one with `npm run build:css` after changing any class name. -->
+    <link rel="stylesheet" href="assets/css/tailwind.css" />
     <link rel="stylesheet" href="assets/css/styles.css" />
 
-    <!-- Applied before first paint so the correct theme never flashes. -->
-    <script>
-        (function () {
-            try {
-                var stored = window.localStorage.getItem('bistro.theme');
-                var theme = stored || (window.Bistro && Bistro.Config ? Bistro.Config.theme.default : 'dark');
-                document.documentElement.classList.toggle('dark', theme === 'dark');
-            } catch (err) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
+    <!-- Applied before first paint so the correct theme never flashes. Kept in
+         its own file so a strict CSP does not need 'unsafe-inline'. -->
+    <script src="assets/js/theme-init.js"></script>
 </head>
 
 <body class="font-sans antialiased">

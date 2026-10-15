@@ -270,16 +270,22 @@ svg {
   }
 }
 
+/* Deliberately no `fill-mode: both`. With `both`, a browser that is not
+   painting frames (background tab, throttled rAF) leaves the element stuck on
+   the animation's `from` frame — i.e. permanently invisible. Without it the
+   element falls back to its natural state, so worst case is "no animation". */
 .animate-pop {
-  animation: popIn 0.32s var(--ease-out-back) both;
+  animation: popIn 0.32s var(--ease-out-back);
 }
 
 .toast {
-  animation: toastIn 0.3s var(--ease-out-back) both;
+  animation: toastIn 0.3s var(--ease-out-back);
 }
 
-/* Reveal-on-scroll: ui.js adds .is-visible via IntersectionObserver */
-.reveal {
+/* Reveal-on-scroll: ui.js adds `.is-visible` via IntersectionObserver.
+   Gated on `html.js` so that without JavaScript the content is simply visible
+   rather than permanently hidden at opacity 0. */
+html.js .reveal {
   opacity: 0;
   transform: translateY(22px);
   transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
@@ -414,7 +420,7 @@ html.dark select {
     transition-duration: 0.001ms !important;
   }
 
-  .reveal {
+  html.js .reveal {
     opacity: 1;
     transform: none;
   }
@@ -450,7 +456,19 @@ html.dark select {
 }
 
 /* --------------------------------------------------------------------------
-   10. Misc
+   10. Ambiance gallery tones
+   The six tile gradients live here rather than in `style=` attributes so the
+   markup stays CSP-clean (`style-src 'self'` without 'unsafe-inline').
+   -------------------------------------------------------------------------- */
+.gallery-tone-1 { background-image: linear-gradient(135deg, #f59e0b, #b45309); }
+.gallery-tone-2 { background-image: linear-gradient(135deg, #14b8a6, #0f766e); }
+.gallery-tone-3 { background-image: linear-gradient(135deg, #6366f1, #312e81); }
+.gallery-tone-4 { background-image: linear-gradient(135deg, #be123c, #7f1d1d); }
+.gallery-tone-5 { background-image: linear-gradient(135deg, #f97316, #c2410c); }
+.gallery-tone-6 { background-image: linear-gradient(135deg, #84cc16, #3f6212); }
+
+/* --------------------------------------------------------------------------
+   11. Misc
    -------------------------------------------------------------------------- */
 .scroll-thin {
   scrollbar-width: thin;

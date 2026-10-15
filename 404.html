@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-title-key="notFound.title">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0b0b0f" />
+    <title>Page not found · Bistro</title>
+
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet" />
+
+    <script src="config.js"></script>
+    <script src="assets/js/theme-init.js"></script>
+    <link rel="stylesheet" href="assets/css/tailwind.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body class="font-sans antialiased">
+    <main class="grid min-h-screen place-items-center p-4">
+        <div class="glass-strong animate-pop w-full max-w-lg rounded-3xl p-8 text-center shadow-2xl">
+            <img data-brand="logo" src="assets/images/logo.svg" alt="" width="56" height="56"
+                class="mx-auto h-14 w-14 rounded-2xl" />
+
+            <p class="gradient-text display mt-6 text-6xl font-bold leading-none">404</p>
+            <h1 class="display mt-3 text-2xl font-bold" data-i18n="notFound.title">Page not found</h1>
+            <p class="mt-3 text-sm leading-relaxed opacity-70" data-i18n="notFound.body"></p>
+
+            <div class="mt-7 flex flex-col items-center gap-3">
+                <a href="./"
+                    class="btn-brand inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold shadow-xl shadow-brand/25">
+                    <span data-i18n="notFound.home">Back to the menu</span>
+                </a>
+
+                <label class="sr-only" for="notfound-lang" data-i18n="common.language">Language</label>
+                <select id="notfound-lang" class="field w-40 cursor-pointer text-sm"></select>
+            </div>
+
+            <p class="mt-8 text-[11px] uppercase tracking-wider opacity-50">
+                <span data-brand="name">Bistro</span>
+            </p>
+        </div>
+    </main>
+
+    <script src="i18n/en.js"></script>
+    <script src="i18n/am.js"></script>
+    <script src="assets/js/state.js"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/not-found.js"></script>
+</body>
+
+</html>

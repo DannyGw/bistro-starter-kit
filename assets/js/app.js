@@ -731,8 +731,8 @@
         dom['gallery-grid'].innerHTML = Bistro.Seed.gallery
             .map(function (tile, index) {
                 return (
-                    '<figure class="card-hover group relative overflow-hidden rounded-3xl" ' +
-                    'style="background:' + UI.attr(tile.gradient) + '">' +
+                    '<figure class="card-hover group relative overflow-hidden rounded-3xl ' +
+                    UI.attr(tile.tone) + '">' +
                     '<div class="aspect-[4/3] w-full"></div>' +
                     '<figcaption class="glass-strong absolute inset-x-3 bottom-3 rounded-2xl px-3.5 py-2.5 text-xs font-semibold">' +
                     UI.escapeHtml(tile.caption) +

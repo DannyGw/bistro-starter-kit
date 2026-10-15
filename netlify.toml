@@ -1,0 +1,24 @@
+# Netlify configuration — static site, no build step required.
+# The compiled assets/css/tailwind.css is committed, so Netlify only needs to
+# publish the repository root. (If you prefer Netlify to build it, set
+# `command = "npm run build:css"` and keep the same publish directory.)
+# ---------------------------------------------------------------------------
+
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'self'; img-src 'self' data:; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net https://js.stripe.com https://www.paypal.com https://js.chapa.co; frame-src 'self' https://js.stripe.com https://www.paypal.com; connect-src 'self' https://*.supabase.co"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Serve the branded 404 page for unknown paths.
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

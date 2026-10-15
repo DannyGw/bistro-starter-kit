@@ -17,35 +17,12 @@
         rel="stylesheet" />
 
     <script src="config.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { brand: 'var(--brand)', accent: 'var(--accent)' },
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        display: ['"Playfair Display"', 'Georgia', 'serif']
-                    },
-                    maxWidth: { shell: '1280px' }
-                }
-            }
-        };
-    </script>
+    <link rel="stylesheet" href="assets/css/tailwind.css" />
     <link rel="stylesheet" href="assets/css/styles.css" />
 
-    <script>
-        (function () {
-            try {
-                var stored = window.localStorage.getItem('bistro.theme');
-                var theme = stored || (window.Bistro && Bistro.Config ? Bistro.Config.theme.default : 'dark');
-                document.documentElement.classList.toggle('dark', theme === 'dark');
-            } catch (err) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
+    <!-- Applied before first paint so the correct theme never flashes. Kept in
+         its own file so a strict CSP does not need 'unsafe-inline'. -->
+    <script src="assets/js/theme-init.js"></script>
 </head>
 
 <body class="font-sans antialiased">

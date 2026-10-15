@@ -218,6 +218,12 @@ window.BistroI18N.en = {
         follow: 'Follow us'
     },
 
+    notFound: {
+        title: 'Page not found',
+        body: 'That page has moved or never existed. The kitchen is still open though — the menu is one click away.',
+        home: 'Back to the menu'
+    },
+
     footer: {
         rights: 'All rights reserved.',
         builtWith: 'Built with the Bistro Starter Kit.',

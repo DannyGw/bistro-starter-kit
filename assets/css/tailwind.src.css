@@ -1,0 +1,11 @@
+/* ==========================================================================
+   Tailwind entry point — COMPILED ARTEFACT INPUT, do not link this file.
+   --------------------------------------------------------------------------
+   `npm run build:css` turns this into assets/css/tailwind.css, which is what
+   the pages actually load. Hand-written component styles live in styles.css and
+   load *after* the compiled utilities so they can override them.
+   ========================================================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

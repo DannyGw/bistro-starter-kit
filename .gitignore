@@ -7,10 +7,8 @@ node_modules/
 bower_components/
 jspm_packages/
 
-# Package manager lockfiles (this kit has zero build deps — see README)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+# Lockfiles ARE committed: assets/css/tailwind.css is a build artefact, so the
+# toolchain that produced it has to be reproducible (`npm ci` in CI).
 
 # Build output / generated bundles
 dist/

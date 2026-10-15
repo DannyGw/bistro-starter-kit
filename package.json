@@ -1,0 +1,22 @@
+{
+  "name": "bistro-starter-kit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modular, white-label web application for restaurants, cafes and fine dining.",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run build:css",
+    "build:css": "tailwindcss -i ./assets/css/tailwind.src.css -o ./assets/css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./assets/css/tailwind.src.css -o ./assets/css/tailwind.css --watch",
+    "check:i18n": "node tools/check-i18n.js",
+    "test": "npm run check:i18n",
+    "serve": "node tools/serve.js"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ]
+}
