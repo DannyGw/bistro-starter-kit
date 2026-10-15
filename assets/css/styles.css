@@ -187,15 +187,9 @@ svg {
   z-index: 70;
   display: flex;
   flex-direction: column;
-}
-
-.drawer-left {
-  inset: 0 auto 0 0;
-  transform: translateX(-102%);
-}
-
-.drawer.is-open {
-  transform: translateX(0);
+    /* The drawer itself never scrolls; an inner region does, so the header and
+       the sticky footer stay put on short viewports. */
+    overflow: hidden;
 }
 
 .scrim {
