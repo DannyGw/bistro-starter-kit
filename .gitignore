@@ -55,3 +55,6 @@ pnpm-debug.log*
 scratch/
 tmp/
 *.tmp
+# Static bundle assembled by `npm run build:static` (Vercel serves this).
+public/
+.vercel

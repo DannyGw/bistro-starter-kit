@@ -7,6 +7,8 @@
   "scripts": {
     "build": "npm run build:css",
     "build:css": "tailwindcss -i ./assets/css/tailwind.src.css -o ./assets/css/tailwind.css --minify",
+    "build:static": "node tools/build-static.js",
+    "vercel-build": "npm run build:css && node tools/build-static.js",
     "watch:css": "tailwindcss -i ./assets/css/tailwind.src.css -o ./assets/css/tailwind.css --watch",
     "check:i18n": "node tools/check-i18n.js",
     "test": "npm run check:i18n",

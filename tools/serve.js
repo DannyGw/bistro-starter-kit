@@ -8,7 +8,8 @@
  *      so header and CSP changes can be verified locally instead of discovered
  *      in production.
  *
- *   node tools/serve.js [--port 8080]
+ *   node tools/serve.js                        # serve the repo root
+ *   node tools/serve.js --port 8081 --dir public   # serve an assembled bundle
  *
  * NOTE: the Content-Security-Policy below is duplicated in vercel.json and
  * netlify.toml — those are consumed by the hosts, not by this process, so there
@@ -22,8 +23,16 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const argPort = process.argv.indexOf('--port');
-const PORT = Number(argPort !== -1 ? process.argv[argPort + 1] : process.env.PORT) || 8080;
+
+function flagValue(name, fallback) {
+    const index = process.argv.indexOf(name);
+    return index !== -1 && process.argv[index + 1] ? process.argv[index + 1] : fallback;
+}
+
+const PORT = Number(flagValue('--port', process.env.PORT)) || 8080;
+
+/** `--dir public` serves an assembled bundle instead of the repo root. */
+const SERVE_ROOT = path.resolve(ROOT, flagValue('--dir', '.'));
 
 const MIME = {
     '.html': 'text/html; charset=utf-8',
@@ -74,19 +83,26 @@ const SECURITY_HEADERS = {
 function resolveSafe(urlPath) {
     const decoded = decodeURIComponent(urlPath.split('?')[0].split('#')[0]);
     const relative = decoded.replace(/^\/+/, '');
-    const target = path.resolve(ROOT, relative);
-    // Never serve outside the project directory.
-    return target.startsWith(ROOT) ? target : null;
+    const target = path.resolve(SERVE_ROOT, relative);
+    // Never serve outside the served directory.
+    return target.startsWith(SERVE_ROOT) ? target : null;
 }
 
-function send(res, status, filePath) {
+function send(req, res, status, filePath) {
+    if (!fs.existsSync(filePath)) {
+        res.writeHead(status, { ...SECURITY_HEADERS, 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('Not Found');
+    }
+
     const body = fs.readFileSync(filePath);
+
+    // HEAD carries the headers but no body.
     res.writeHead(status, {
         ...SECURITY_HEADERS,
         'Content-Type': MIME[path.extname(filePath).toLowerCase()] || 'application/octet-stream',
         'Content-Length': body.length
     });
-    res.end(body);
+    res.end(req.method === 'HEAD' ? undefined : body);
 }
 
 const server = http.createServer((req, res) => {
@@ -100,6 +116,7 @@ const server = http.createServer((req, res) => {
     if (target && fs.existsSync(target) && fs.statSync(target).isDirectory()) {
         target = path.join(target, 'index.html');
     }
+
     // Extensionless URLs, matching `cleanUrls` on Vercel.
     if (target && !fs.existsSync(target) && fs.existsSync(target + '.html')) {
         target += '.html';
@@ -107,15 +124,16 @@ const server = http.createServer((req, res) => {
 
     if (!target || !fs.existsSync(target)) {
         console.log(`404 ${req.url}`);
-        return send(res, 404, path.join(ROOT, '404.html'));
+        return send(req, res, 404, path.join(SERVE_ROOT, '404.html'));
     }
 
     console.log(`200 ${req.url}`);
-    send(res, 200, target);
+    send(req, res, 200, target);
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-    console.log(`Bistro Starter Kit → http://127.0.0.1:${PORT}/`);
+    const label = path.relative(ROOT, SERVE_ROOT) || '.';
+    console.log(`Bistro Starter Kit → http://127.0.0.1:${PORT}/  (serving ${label})`);
     console.log(`  admin dashboard  → http://127.0.0.1:${PORT}/admin.html`);
     console.log('  serving with deployment security headers (incl. CSP)');
 });
