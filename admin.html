@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-title-key="admin.title">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0b0b0f" />
+    <title>Bistro — Dashboard</title>
+
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet" />
+
+    <script src="config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { brand: 'var(--brand)', accent: 'var(--accent)' },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['"Playfair Display"', 'Georgia', 'serif']
+                    },
+                    maxWidth: { shell: '1280px' }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <script>
+        (function () {
+            try {
+                var stored = window.localStorage.getItem('bistro.theme');
+                var theme = stored || (window.Bistro && Bistro.Config ? Bistro.Config.theme.default : 'dark');
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+            } catch (err) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+</head>
+
+<body class="font-sans antialiased">
+    <!-- ===================================================================
+       Passcode gate (DEMO ONLY — replace with real auth, see config.js)
+       ================================================================== -->
+    <div id="admin-gate" class="grid min-h-screen place-items-center p-4">
+        <div class="glass-strong animate-pop w-full max-w-sm rounded-3xl p-7 shadow-2xl">
+            <div class="flex items-center gap-3">
+                <img data-brand="logo" src="assets/images/logo.svg" alt="Bistro" width="40" height="40"
+                    class="h-10 w-10 rounded-xl" />
+                <div>
+                    <h1 class="display text-xl font-bold" data-i18n="admin.loginTitle">Staff sign-in</h1>
+                    <p class="text-xs opacity-60" data-brand="name">Bistro</p>
+                </div>
+            </div>
+
+            <p class="mt-5 text-sm leading-relaxed opacity-70" data-i18n="admin.loginSubtitle"></p>
+
+            <form id="gate-form" class="mt-6 space-y-4" novalidate>
+                <div>
+                    <label class="field-label" for="gate-passcode" data-i18n="admin.passcodeLabel">Passcode</label>
+                    <input id="gate-passcode" type="password" class="field" autocomplete="current-password" required
+                        data-i18n-placeholder="admin.passcodePlaceholder" placeholder="••••••••" />
+                </div>
+
+                <p id="gate-error" class="field-error hidden" role="alert" data-i18n="admin.loginError"></p>
+
+                <button type="submit" id="gate-submit"
+                    class="btn-brand inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold">
+                    <span data-lock-icon></span>
+                    <span data-i18n="admin.login">Sign in</span>
+                </button>
+            </form>
+
+            <p id="gate-hint"
+                class="mt-5 hidden rounded-xl bg-amber-400/10 px-3 py-2 text-[11px] leading-snug text-amber-600 dark:text-amber-400">
+            </p>
+
+            <a class="mt-5 block text-center text-xs underline opacity-60 hover:opacity-100" href="index.html"
+                data-i18n="nav.home">Home</a>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+       Dashboard
+       ================================================================== -->
+    <div id="admin-app" class="hidden min-h-screen">
+        <header class="glass sticky top-0 z-40 border-b border-black/5 dark:border-white/5">
+            <div class="mx-auto flex max-w-shell flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
+                <a href="index.html" class="flex items-center gap-2.5">
+                    <img data-brand="logo" src="assets/images/logo.svg" alt="Bistro" width="36" height="36"
+                        class="h-9 w-9 rounded-xl" />
+                    <span class="flex flex-col leading-none">
+                        <span class="display text-base font-bold" data-i18n="admin.title">Staff dashboard</span>
+                        <span class="mt-0.5 text-[11px] opacity-60" data-brand="name">Bistro</span>
+                    </span>
+                </a>
+
+                <span id="mode-badge" class="glass ms-2 rounded-full px-3 py-1 text-[11px] font-semibold"
+                    title="Data source"></span>
+
+                <div class="ms-auto flex items-center gap-1.5">
+                    <label class="sr-only" for="admin-lang" data-i18n="common.language">Language</label>
+                    <select id="admin-lang" class="field hidden cursor-pointer py-2 text-sm sm:block"></select>
+
+                    <button type="button" id="admin-theme-toggle"
+                        class="grid h-10 w-10 place-items-center rounded-xl border border-black/10 bg-white/60 transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                        aria-label="Switch theme" data-i18n-aria-label="common.theme">
+                        <span data-theme-icon></span>
+                    </button>
+
+                    <button type="button" id="admin-refresh"
+                        class="grid h-10 w-10 place-items-center rounded-xl border border-black/10 bg-white/60 transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                        aria-label="Refresh" data-i18n-aria-label="admin.action.refresh">
+                        <span data-refresh-icon></span>
+                    </button>
+
+                    <button type="button" id="admin-logout"
+                        class="glass inline-flex h-10 items-center gap-2 rounded-xl px-3.5 text-sm font-semibold transition hover:-translate-y-0.5">
+                        <span data-logout-icon></span>
+                        <span class="hidden sm:inline" data-i18n="admin.logout">Sign out</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="mx-auto max-w-shell px-4 py-6 sm:px-6">
+            <p class="text-sm opacity-65" data-i18n="admin.subtitle">Live orders, bookings and menu availability.</p>
+
+            <!-- Stats -->
+            <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div class="glass rounded-2xl p-5">
+                    <div class="flex items-center justify-between">
+                        <p class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="admin.stats.orders">Orders
+                        </p>
+                        <span class="text-brand" data-receipt-icon></span>
+                    </div>
+                    <p id="stat-orders" class="display mt-2 text-3xl font-bold">0</p>
+                </div>
+                <div class="glass rounded-2xl p-5">
+                    <div class="flex items-center justify-between">
+                        <p class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="admin.stats.revenue">
+                            Revenue</p>
+                        <span class="text-brand" data-card-icon></span>
+                    </div>
+                    <p id="stat-revenue" class="display mt-2 text-3xl font-bold">—</p>
+                </div>
+                <div class="glass rounded-2xl p-5">
+                    <div class="flex items-center justify-between">
+                        <p class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="admin.stats.reservations">
+                            Bookings</p>
+                        <span class="text-brand" data-calendar-icon></span>
+                    </div>
+                    <p id="stat-reservations" class="display mt-2 text-3xl font-bold">0</p>
+                </div>
+                <div class="glass rounded-2xl p-5">
+                    <div class="flex items-center justify-between">
+                        <p class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="admin.stats.pending">
+                            Awaiting action</p>
+                        <span class="text-brand" data-alert-icon></span>
+                    </div>
+                    <p id="stat-pending" class="display mt-2 text-3xl font-bold">0</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div id="admin-tabs" class="no-scrollbar mt-6 flex gap-2 overflow-x-auto pb-1" role="tablist"></div>
+
+            <!-- Orders -->
+            <section id="panel-orders" class="mt-4 space-y-3"></section>
+            <p id="orders-empty" class="glass hidden rounded-3xl px-6 py-12 text-center text-sm opacity-70"
+                data-i18n="admin.empty.orders"></p>
+
+            <!-- Reservations -->
+            <section id="panel-reservations" class="mt-4 space-y-3"></section>
+            <p id="reservations-empty" class="glass hidden rounded-3xl px-6 py-12 text-center text-sm opacity-70"
+                data-i18n="admin.empty.reservations"></p>
+
+            <!-- Menu availability -->
+            <section id="panel-menu" class="mt-4">
+                <div id="menu-admin-grid" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"></div>
+                <p id="menu-admin-empty" class="glass hidden rounded-3xl px-6 py-12 text-center text-sm opacity-70"
+                    data-i18n="admin.empty.menu"></p>
+            </section>
+
+            <!-- Settings -->
+            <section id="panel-settings" class="mt-4 grid gap-4 lg:grid-cols-2">
+                <div class="glass rounded-3xl p-6">
+                    <h2 class="display text-lg font-bold" data-i18n="admin.settings.brand">Brand</h2>
+                    <dl class="mt-4 space-y-2.5 text-sm">
+                        <div class="flex justify-between gap-4">
+                            <dt class="opacity-60" data-i18n="admin.settings.brand">Brand</dt>
+                            <dd class="text-end font-medium" data-brand="name">Bistro</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="opacity-60" data-i18n="contact.email">Email</dt>
+                            <dd class="text-end font-medium" data-brand="email">—</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="opacity-60" data-i18n="contact.address">Address</dt>
+                            <dd class="text-end font-medium" data-brand="address">—</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="opacity-60" data-i18n="admin.mode">Data source</dt>
+                            <dd id="settings-mode" class="text-end font-medium">—</dd>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <dt class="opacity-60" data-i18n="admin.settings.backend">Backend</dt>
+                            <dd id="settings-backend" class="text-end font-medium">—</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="glass rounded-3xl p-6">
+                    <h2 class="display text-lg font-bold" data-i18n="admin.settings.features">Enabled features</h2>
+                    <ul id="settings-features" class="mt-4 flex flex-wrap gap-2 text-xs"></ul>
+
+                    <div class="mt-6 border-t border-black/5 pt-5 dark:border-white/10">
+                        <h3 class="text-sm font-semibold text-rose-500" data-i18n="admin.settings.dangerZone">Danger
+                            zone</h3>
+                        <p class="mt-1 text-xs opacity-65" data-i18n="admin.settings.resetHint"></p>
+                        <button type="button" id="settings-reset"
+                            class="mt-3 inline-flex items-center gap-2 rounded-xl border border-rose-400/40 px-4 py-2.5 text-sm font-semibold text-rose-500 transition hover:bg-rose-500/10">
+                            <span data-trash-icon></span>
+                            <span data-i18n="admin.action.reset">Reset demo data</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast-host" class="fixed bottom-5 left-1/2 z-[90] flex w-[min(92vw,26rem)] -translate-x-1/2 flex-col gap-2"
+        role="status" aria-live="polite"></div>
+
+    <script src="i18n/en.js"></script>
+    <script src="i18n/fr.js"></script>
+    <script src="i18n/am.js"></script>
+    <script src="i18n/es.js"></script>
+    <script src="assets/js/seed-data.js"></script>
+    <script src="assets/js/state.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script src="assets/js/payments.js"></script>
+    <script src="assets/js/qr.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+
+</html>

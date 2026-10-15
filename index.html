@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-title-key="meta.title" data-description-key="meta.description">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Seasonal plates, natural wine and a room built for long dinners." />
+    <meta name="theme-color" content="#0b0b0f" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bistro" />
+    <meta property="og:description" content="Seasonal plates, natural wine and a room built for long dinners." />
+    <meta property="og:image" content="assets/images/hero.svg" />
+    <title>Bistro</title>
+
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Configuration must load before Tailwind so the palette can be derived. -->
+    <script src="config.js"></script>
+
+    <!-- Tailwind Play CDN. For production, compile Tailwind locally instead. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: 'var(--brand)',
+                        accent: 'var(--accent)'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['"Playfair Display"', 'Georgia', 'serif']
+                    },
+                    maxWidth: { shell: '1200px' }
+                }
+            }
+        };
+    </script>
+
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <!-- Applied before first paint so the correct theme never flashes. -->
+    <script>
+        (function () {
+            try {
+                var stored = window.localStorage.getItem('bistro.theme');
+                var theme = stored || (window.Bistro && Bistro.Config ? Bistro.Config.theme.default : 'dark');
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+            } catch (err) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+</head>
+
+<body class="font-sans antialiased">
+    <a class="skip-link" href="#main" data-i18n="common.skipToContent">Skip to content</a>
+
+    <!-- ===================================================================
+       Header
+       ================================================================== -->
+    <header id="site-header" class="glass sticky top-0 z-50 border-b border-black/5 dark:border-white/5">
+        <div class="mx-auto flex max-w-shell items-center gap-3 px-4 py-3 sm:px-6">
+            <a href="#hero" class="flex items-center gap-2.5" aria-label="Bistro">
+                <img data-brand="logo" src="assets/images/logo.svg" alt="Bistro" width="40" height="40"
+                    class="h-10 w-10 rounded-xl shadow-lg shadow-brand/20" />
+                <span class="flex flex-col leading-none">
+                    <span class="display text-lg font-bold" data-brand="name">Bistro</span>
+                    <span class="mt-0.5 hidden text-[11px] uppercase tracking-[0.18em] opacity-60 sm:block"
+                        data-brand="tagline">Modern dining</span>
+                </span>
+            </a>
+
+            <nav class="ms-6 hidden items-center gap-1 lg:flex" aria-label="Primary">
+                <a class="rounded-lg px-3 py-2 text-sm font-medium opacity-80 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                    href="#menu" data-i18n="nav.menu">Menu</a>
+                <a class="rounded-lg px-3 py-2 text-sm font-medium opacity-80 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                    href="#reservations" data-i18n="nav.reservations">Reservations</a>
+                <a class="rounded-lg px-3 py-2 text-sm font-medium opacity-80 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                    href="#gallery" data-i18n="nav.gallery">Ambiance</a>
+                <a class="rounded-lg px-3 py-2 text-sm font-medium opacity-80 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                    href="#reviews" data-i18n="nav.reviews">Reviews</a>
+                <a class="rounded-lg px-3 py-2 text-sm font-medium opacity-80 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                    href="#qr" data-i18n="nav.order">Order now</a>
+                <a class="rounded-lg px-3 py-2 text-sm font-medium opacity-80 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                    href="#contact" data-i18n="nav.contact">Contact</a>
+            </nav>
+
+            <div class="ms-auto flex items-center gap-1.5">
+                <!-- Language switcher -->
+                <div class="relative hidden sm:block">
+                    <label class="sr-only" for="lang-select" data-i18n="common.language">Language</label>
+                    <select id="lang-select" class="field cursor-pointer appearance-none py-2 ps-9 pe-7 text-sm"
+                        data-i18n-aria-label="common.language"></select>
+                    <span class="pointer-events-none absolute inset-y-0 start-2.5 my-auto h-4 text-current opacity-60"
+                        data-lang-icon></span>
+                </div>
+
+                <button type="button" id="theme-toggle"
+                    class="grid h-10 w-10 place-items-center rounded-xl border border-black/10 bg-white/60 transition hover:bg-white/90 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                    data-i18n-aria-label="common.theme" aria-label="Switch theme">
+                    <span data-theme-icon></span>
+                </button>
+
+                <button type="button"
+                    class="btn-brand inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold shadow-lg shadow-brand/25"
+                    data-open="cart-drawer" data-i18n-aria-label="cart.open" aria-label="Open your order">
+                    <span data-cart-icon></span>
+                    <span class="hidden sm:inline" data-i18n="cart.title">Your order</span>
+                    <span id="cart-count"
+                        class="grid h-5 min-w-5 place-items-center rounded-full bg-black/85 px-1 text-[11px] font-bold text-white dark:bg-black">0</span>
+                </button>
+
+                <button type="button" id="nav-toggle"
+                    class="grid h-10 w-10 place-items-center rounded-xl border border-black/10 bg-white/60 transition hover:bg-white/90 lg:hidden dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+                    data-open="mobile-nav" data-i18n-aria-label="nav.openMenu" aria-label="Open navigation">
+                    <span data-nav-icon></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile navigation drawer (left) -->
+    <div class="scrim" id="mobile-nav-scrim" data-scrim="mobile-nav"></div>
+    <aside id="mobile-nav" class="drawer drawer-left glass-strong" aria-hidden="true" aria-label="Navigation">
+        <div class="flex items-center justify-between border-b border-black/5 px-5 py-4 dark:border-white/10">
+            <span class="display text-lg font-bold" data-brand="name">Bistro</span>
+            <button type="button"
+                class="grid h-9 w-9 place-items-center rounded-lg transition hover:bg-black/5 dark:hover:bg-white/10"
+                data-close="mobile-nav" data-i18n-aria-label="nav.closeMenu" aria-label="Close navigation">
+                <span data-close-icon></span>
+            </button>
+        </div>
+        <nav class="flex flex-1 flex-col gap-1 overflow-y-auto p-4 scroll-thin" aria-label="Mobile">
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10" href="#menu"
+                data-close="mobile-nav" data-i18n="nav.menu">Menu</a>
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+                href="#reservations" data-close="mobile-nav" data-i18n="nav.reservations">Reservations</a>
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+                href="#gallery" data-close="mobile-nav" data-i18n="nav.gallery">Ambiance</a>
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+                href="#reviews" data-close="mobile-nav" data-i18n="nav.reviews">Reviews</a>
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10" href="#qr"
+                data-close="mobile-nav" data-i18n="nav.order">Order now</a>
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10" href="#about"
+                data-close="mobile-nav" data-i18n="nav.about">About</a>
+            <a class="rounded-xl px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+                href="#contact" data-close="mobile-nav" data-i18n="nav.contact">Contact</a>
+
+            <div class="mt-3 border-t border-black/5 pt-3 dark:border-white/10">
+                <label class="field-label" for="lang-select-mobile" data-i18n="common.language">Language</label>
+                <select id="lang-select-mobile" class="field cursor-pointer"></select>
+            </div>
+            <a class="mt-2 rounded-xl px-4 py-3 text-sm font-medium opacity-70 transition hover:bg-black/5 dark:hover:bg-white/10"
+                href="admin.html" data-i18n="footer.admin">Staff dashboard</a>
+        </nav>
+    </aside>
+
+    <main id="main">
+        <!-- =================================================================
+         Hero
+         ================================================================ -->
+        <section id="hero" class="relative overflow-hidden">
+            <div
+                class="mx-auto grid max-w-shell items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:py-24">
+                <div class="animate-pop">
+                    <span
+                        class="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide">
+                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                        <span data-i18n="hero.badge">Open today</span>
+                    </span>
+
+                    <h1 class="mt-5 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-6xl">
+                        <span data-i18n="hero.title">Modern dining,</span><br />
+                        <span class="gradient-text" data-i18n="hero.titleAccent">served beautifully.</span>
+                    </h1>
+
+                    <p class="mt-5 max-w-xl text-base leading-relaxed opacity-75 sm:text-lg" data-i18n="hero.subtitle">
+                        Seasonal plates and a room built for long dinners.
+                    </p>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3">
+                        <a href="#menu"
+                            class="btn-brand inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold shadow-xl shadow-brand/30">
+                            <span data-i18n="hero.ctaPrimary">Explore the menu</span>
+                            <span data-arrow-icon></span>
+                        </a>
+                        <a href="#reservations"
+                            class="glass inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold transition hover:-translate-y-0.5">
+                            <span data-calendar-icon></span>
+                            <span data-i18n="hero.ctaSecondary">Book a table</span>
+                        </a>
+                    </div>
+
+                    <dl class="mt-10 grid max-w-lg grid-cols-3 gap-4">
+                        <div class="glass rounded-2xl px-4 py-3">
+                            <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="hero.statDishes">
+                                Seasonal dishes</dt>
+                            <dd class="display mt-1 text-2xl font-bold" data-stat="dishes">—</dd>
+                        </div>
+                        <div class="glass rounded-2xl px-4 py-3">
+                            <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="hero.statRating">
+                                Average rating</dt>
+                            <dd class="display mt-1 text-2xl font-bold" data-stat="rating">—</dd>
+                        </div>
+                        <div class="glass rounded-2xl px-4 py-3">
+                            <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="hero.statTables">
+                                Tables today</dt>
+                            <dd class="display mt-1 text-2xl font-bold" data-stat="tables">—</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="relative animate-pop">
+                    <div class="glass overflow-hidden rounded-[var(--radius-xl)] p-2">
+                        <img src="assets/images/hero.svg" alt=""
+                            class="h-[320px] w-full rounded-[calc(var(--radius-xl)-8px)] object-cover sm:h-[420px]" />
+                    </div>
+                    <div id="hero-flash"
+                        class="glass-strong absolute -bottom-4 start-4 hidden items-center gap-3 rounded-2xl px-4 py-3 text-sm shadow-2xl sm:flex">
+                        <span class="text-emerald-500" data-check-icon></span>
+                        <span data-i18n="hero.badge">Open today</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+         Menu
+         ================================================================ -->
+        <section id="menu" class="mx-auto max-w-shell scroll-mt-20 px-4 py-14 sm:px-6">
+            <header class="reveal max-w-2xl">
+                <h2 class="text-3xl font-bold sm:text-4xl" data-i18n="menu.title">Our menu</h2>
+                <p class="mt-3 opacity-70" data-i18n="menu.subtitle">Small plates to share.</p>
+                <div class="rule-gradient mt-6"></div>
+            </header>
+
+            <!-- Category tabs -->
+            <div id="menu-tabs" class="no-scrollbar reveal mt-8 flex gap-2 overflow-x-auto pb-1" role="tablist"
+                aria-label="Menu categories"></div>
+
+            <!-- Search / filters / sort -->
+            <div class="reveal mt-5 flex flex-col gap-4 lg:flex-row lg:items-center">
+                <div class="relative flex-1">
+                    <label class="sr-only" for="menu-search" data-i18n="menu.searchLabel">Search the menu</label>
+                    <span class="pointer-events-none absolute inset-y-0 start-3 my-auto h-5 opacity-50"
+                        data-search-icon></span>
+                    <input id="menu-search" type="search" class="field ps-11" autocomplete="off"
+                        data-i18n-placeholder="menu.searchPlaceholder" placeholder="Search dishes…" />
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div id="menu-filters" class="no-scrollbar flex gap-2 overflow-x-auto pb-1" role="group"
+                        aria-label="Dietary filters"></div>
+
+                    <div class="relative shrink-0">
+                        <label class="sr-only" for="menu-sort" data-i18n="menu.sortLabel">Sort</label>
+                        <select id="menu-sort" class="field cursor-pointer pe-8 text-sm">
+                            <option value="popular" data-i18n="menu.sortPopular">Most popular</option>
+                            <option value="price-asc" data-i18n="menu.sortPriceLow">Price: low to high</option>
+                            <option value="price-desc" data-i18n="menu.sortPriceHigh">Price: high to low</option>
+                            <option value="name" data-i18n="menu.sortName">Name (A–Z)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <p id="menu-results" class="mt-4 text-sm opacity-60" aria-live="polite"></p>
+
+            <!-- Grid -->
+            <div id="menu-grid" class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+            <!-- Empty state -->
+            <div id="menu-empty"
+                class="glass mt-6 hidden flex-col items-center gap-3 rounded-3xl px-6 py-14 text-center">
+                <span class="opacity-50" data-search-icon></span>
+                <h3 class="text-lg font-semibold" data-i18n="menu.empty">Nothing matches those filters.</h3>
+                <p class="max-w-sm text-sm opacity-70" data-i18n="menu.emptyHint"></p>
+                <button type="button" id="menu-clear-filters"
+                    class="btn-brand mt-1 rounded-xl px-5 py-2.5 text-sm font-semibold" data-i18n="menu.clearFilters">
+                    Clear filters
+                </button>
+            </div>
+        </section>
+
+        <!-- =================================================================
+         Gallery
+         ================================================================ -->
+        <section id="gallery" class="mx-auto max-w-shell scroll-mt-20 px-4 py-14 sm:px-6">
+            <header class="reveal max-w-2xl">
+                <h2 class="text-3xl font-bold sm:text-4xl" data-i18n="gallery.title">The room</h2>
+                <p class="mt-3 opacity-70" data-i18n="gallery.subtitle">A quick look around.</p>
+                <div class="rule-gradient mt-6"></div>
+            </header>
+            <div id="gallery-grid" class="reveal mt-8 grid grid-cols-2 gap-4 md:grid-cols-3"></div>
+        </section>
+
+        <!-- =================================================================
+         Reservations
+         ================================================================ -->
+        <section id="reservations" class="mx-auto max-w-shell scroll-mt-20 px-4 py-14 sm:px-6">
+            <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+                <header class="reveal">
+                    <h2 class="text-3xl font-bold sm:text-4xl" data-i18n="res.title">Book a table</h2>
+                    <p class="mt-3 opacity-70" data-i18n="res.subtitle">Tell us when.</p>
+                    <div class="rule-gradient mt-6"></div>
+
+                    <ul class="mt-8 space-y-4 text-sm">
+                        <li class="glass flex items-start gap-3 rounded-2xl p-4">
+                            <span class="text-brand mt-0.5" data-info-icon></span>
+                            <span data-i18n="res.pendingNotice"></span>
+                        </li>
+                        <li class="glass flex items-start gap-3 rounded-2xl p-4">
+                            <span class="text-brand mt-0.5" data-clock-icon></span>
+                            <span data-i18n="res.policy"></span>
+                        </li>
+                        <li class="glass flex items-start gap-3 rounded-2xl p-4">
+                            <span class="text-brand mt-0.5" data-phone-icon></span>
+                            <span data-brand="phone">+1 (555) 010-2030</span>
+                        </li>
+                    </ul>
+                </header>
+
+                <div class="glass reveal rounded-3xl p-6 sm:p-8">
+                    <form id="reservation-form" novalidate class="space-y-4">
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="field-label" for="res-name" data-i18n="res.nameLabel">Full name</label>
+                                <input id="res-name" name="name" class="field" required
+                                    data-i18n-placeholder="res.namePlaceholder" placeholder="Jane Doe" />
+                            </div>
+                            <div>
+                                <label class="field-label" for="res-phone" data-i18n="res.phoneLabel">Phone</label>
+                                <input id="res-phone" name="phone" type="tel" class="field" required
+                                    data-i18n-placeholder="res.phonePlaceholder" placeholder="+1 555 010 2030" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="res-email" data-i18n="res.emailLabel">Email
+                                (optional)</label>
+                            <input id="res-email" name="email" type="email" class="field"
+                                data-i18n-placeholder="res.emailPlaceholder" placeholder="jane@example.com" />
+                        </div>
+
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <div>
+                                <label class="field-label" for="res-date" data-i18n="res.dateLabel">Date</label>
+                                <input id="res-date" name="date" type="date" class="field" required />
+                            </div>
+                            <div>
+                                <label class="field-label" for="res-time" data-i18n="res.timeLabel">Time</label>
+                                <select id="res-time" name="time" class="field cursor-pointer" required></select>
+                            </div>
+                            <div>
+                                <label class="field-label" for="res-guests" data-i18n="res.guestsLabel">Guests</label>
+                                <select id="res-guests" name="guests" class="field cursor-pointer" required></select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="res-notes" data-i18n="res.notesLabel">Special
+                                requests</label>
+                            <textarea id="res-notes" name="notes" rows="3" class="field resize-none"
+                                data-i18n-placeholder="res.notesPlaceholder"
+                                placeholder="Birthday, window table…"></textarea>
+                        </div>
+
+                        <p id="res-error" class="field-error hidden" role="alert"></p>
+
+                        <button type="submit" id="res-submit"
+                            class="btn-brand inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold shadow-xl shadow-brand/25">
+                            <span data-i18n="res.submit">Request booking</span>
+                        </button>
+                    </form>
+
+                    <div id="res-success" class="hidden flex-col items-center gap-3 py-6 text-center">
+                        <span class="grid h-14 w-14 place-items-center rounded-full bg-emerald-500/15 text-emerald-500"
+                            data-check-icon></span>
+                        <h3 class="display text-xl font-bold" data-i18n="res.successTitle">Table requested</h3>
+                        <p class="max-w-sm text-sm opacity-75" data-i18n="res.successBody"></p>
+                        <p class="glass rounded-xl px-4 py-2 text-sm">
+                            <span class="opacity-60" data-i18n="res.reference">Booking reference</span>:
+                            <strong id="res-reference">—</strong>
+                        </p>
+                        <button type="button" id="res-again"
+                            class="mt-1 rounded-xl border border-current/20 px-5 py-2.5 text-sm font-semibold"
+                            data-i18n="checkout.newOrder">
+                            Start a new order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+         Reviews
+         ================================================================ -->
+        <section id="reviews" class="mx-auto max-w-shell scroll-mt-20 px-4 py-14 sm:px-6">
+            <header class="reveal max-w-2xl">
+                <h2 class="text-3xl font-bold sm:text-4xl" data-i18n="reviews.title">What guests say</h2>
+                <p class="mt-3 opacity-70" data-i18n="reviews.subtitle">Unedited reviews.</p>
+                <div class="rule-gradient mt-6"></div>
+            </header>
+            <div id="reviews-grid" class="reveal mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4"></div>
+        </section>
+
+        <!-- =================================================================
+         QR table ordering
+         ================================================================ -->
+        <section id="qr" class="mx-auto max-w-shell scroll-mt-20 px-4 py-14 sm:px-6">
+            <div class="glass relative overflow-hidden rounded-3xl p-6 sm:p-10">
+                <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                    <div class="reveal">
+                        <h2 class="text-3xl font-bold sm:text-4xl" data-i18n="qr.title">Order from your table</h2>
+                        <p class="mt-3 opacity-70" data-i18n="qr.subtitle">Scan the code on your table.</p>
+                        <p class="mt-4 text-sm opacity-70" data-i18n="qr.hint"></p>
+
+                        <div class="mt-6 flex flex-wrap items-end gap-3">
+                            <div class="w-32">
+                                <label class="field-label" for="qr-table" data-i18n="qr.tableLabel">Table</label>
+                                <select id="qr-table" class="field cursor-pointer"></select>
+                            </div>
+                            <button type="button" id="qr-generate"
+                                class="btn-brand inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold">
+                                <span data-qr-icon></span>
+                                <span data-i18n="qr.generate">Show code</span>
+                            </button>
+                            <button type="button" id="qr-download"
+                                class="glass hidden inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5">
+                                <span data-download-icon></span>
+                                <span data-i18n="qr.download">Download PNG</span>
+                            </button>
+                        </div>
+
+                        <p id="qr-note" class="mt-4 hidden text-xs opacity-60"></p>
+                        <a id="qr-link" class="mt-4 hidden break-all text-xs underline opacity-70 hover:opacity-100"
+                            href="#" target="_blank" rel="noopener"></a>
+                    </div>
+
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="glass-strong grid h-[248px] w-[248px] place-items-center rounded-3xl p-3">
+                            <img id="qr-image" alt="" class="hidden h-full w-full rounded-2xl object-contain" />
+                            <span id="qr-placeholder" class="text-center text-xs opacity-50">
+                                <span class="mx-auto mb-2 block h-8 opacity-40" data-qr-icon></span>
+                                <span data-i18n="qr.generate">Show code</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+         About + contact
+         ================================================================ -->
+        <section id="about" class="mx-auto max-w-shell scroll-mt-20 px-4 py-14 sm:px-6">
+            <div id="contact" class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+                <div class="reveal">
+                    <h2 class="text-3xl font-bold sm:text-4xl" data-i18n="about.title">About us</h2>
+                    <div class="rule-gradient mt-6 mb-6"></div>
+                    <p class="max-w-2xl leading-relaxed opacity-75" data-i18n="about.body"></p>
+                </div>
+
+                <div class="glass reveal rounded-3xl p-6 sm:p-8">
+                    <h3 class="display text-xl font-bold" data-i18n="contact.title">Visit us</h3>
+                    <dl class="mt-5 space-y-4 text-sm">
+                        <div class="flex items-start gap-3">
+                            <span class="text-brand mt-0.5" data-pin-icon></span>
+                            <div>
+                                <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="contact.address">
+                                    Address</dt>
+                                <dd class="mt-0.5" data-brand="address"></dd>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-brand mt-0.5" data-clock-icon></span>
+                            <div>
+                                <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="contact.hours">
+                                    Opening hours</dt>
+                                <dd class="mt-0.5">11:00 – 22:30</dd>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-brand mt-0.5" data-phone-icon></span>
+                            <div>
+                                <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="contact.phone">
+                                    Phone</dt>
+                                <dd class="mt-0.5"><a data-brand="phone" href="tel:">+1 (555) 010-2030</a></dd>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-brand mt-0.5" data-mail-icon></span>
+                            <div>
+                                <dt class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="contact.email">
+                                    Email</dt>
+                                <dd class="mt-0.5"><a data-brand="email" href="mailto:">hello@bistro.example</a></dd>
+                            </div>
+                        </div>
+                    </dl>
+
+                    <div class="mt-6 border-t border-black/5 pt-5 dark:border-white/10">
+                        <p class="text-[11px] uppercase tracking-wider opacity-60" data-i18n="contact.follow">Follow us
+                        </p>
+                        <div class="mt-3 flex gap-2">
+                            <a class="glass grid h-10 w-10 place-items-center rounded-xl transition hover:-translate-y-0.5"
+                                data-brand-social="instagram" href="#" target="_blank" rel="noopener"
+                                aria-label="Instagram">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.7" aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                                    <circle cx="12" cy="12" r="4" />
+                                    <circle cx="17.2" cy="6.8" r="1" />
+                                </svg>
+                            </a>
+                            <a class="glass grid h-10 w-10 place-items-center rounded-xl transition hover:-translate-y-0.5"
+                                data-brand-social="facebook" href="#" target="_blank" rel="noopener"
+                                aria-label="Facebook">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M13.5 21v-7h2.4l.4-3h-2.8V9.2c0-.9.3-1.5 1.6-1.5h1.3V5.1C16.1 5 15.2 5 14.2 5c-2.4 0-4 1.4-4 4.1V11H8v3h2.2v7z" />
+                                </svg>
+                            </a>
+                            <a class="glass grid h-10 w-10 place-items-center rounded-xl transition hover:-translate-y-0.5"
+                                data-brand-social="x" href="#" target="_blank" rel="noopener" aria-label="X">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M17.5 4h2.7l-5.9 6.7L21 20h-5.4l-4-5.3L6.9 20H4.2l6.3-7.2L3.5 4H9l3.6 4.8zm-1 14.2h1.5L8 5.7H6.4z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================================================================
+       Footer
+       ================================================================== -->
+    <footer class="glass mt-8 border-t border-black/5 dark:border-white/10">
+        <div
+            class="mx-auto flex max-w-shell flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div class="flex items-center gap-3">
+                <img data-brand="logo" src="assets/images/logo.svg" alt="Bistro" width="32" height="32"
+                    class="h-8 w-8 rounded-lg" />
+                <div class="text-sm">
+                    <p class="font-semibold">© <span id="year">2026</span> <span data-brand="name">Bistro</span></p>
+                    <p class="text-xs opacity-60" data-i18n="footer.rights">All rights reserved.</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs opacity-70">
+                <span data-i18n="footer.demo">Demo data — nothing is charged.</span>
+                <a class="underline hover:opacity-100" href="admin.html" data-i18n="footer.admin">Staff dashboard</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===================================================================
+       Cart drawer
+       ================================================================== -->
+    <div class="scrim" id="cart-drawer-scrim" data-scrim="cart-drawer"></div>
+    <aside id="cart-drawer" class="drawer glass-strong" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="cart-heading">
+        <div class="flex items-center justify-between border-b border-black/5 px-5 py-4 dark:border-white/10">
+            <h2 id="cart-heading" class="display text-lg font-bold" data-i18n="cart.title">Your order</h2>
+            <div class="flex items-center gap-1">
+                <button type="button" id="cart-clear"
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium opacity-70 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10">
+                    <span data-i18n="cart.clear">Clear</span>
+                </button>
+                <button type="button"
+                    class="grid h-9 w-9 place-items-center rounded-lg transition hover:bg-black/5 dark:hover:bg-white/10"
+                    data-close="cart-drawer" aria-label="Close" data-i18n-aria-label="common.close">
+                    <span data-close-icon></span>
+                </button>
+            </div>
+        </div>
+
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4 scroll-thin"></div>
+
+        <div id="cart-empty" class="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
+            <span class="grid h-16 w-16 place-items-center rounded-2xl bg-black/5 text-2xl dark:bg-white/10"
+                data-cart-icon></span>
+            <h3 class="font-semibold" data-i18n="cart.empty">Your order is empty</h3>
+            <p class="max-w-[15rem] text-sm opacity-70" data-i18n="cart.emptyHint"></p>
+            <button type="button" class="btn-brand mt-1 rounded-xl px-5 py-2.5 text-sm font-semibold"
+                data-close="cart-drawer" data-i18n="cart.browse">
+                Browse the menu
+            </button>
+        </div>
+
+        <div id="cart-footer" class="hidden border-t border-black/5 p-4 dark:border-white/10">
+            <!-- Order type -->
+            <p class="field-label" data-i18n="orderType.label">How would you like it?</p>
+            <div id="order-type-group"
+                class="mb-4 grid grid-cols-3 gap-1.5 rounded-2xl bg-black/5 p-1.5 dark:bg-white/5">
+                <button type="button" data-order-type="dine-in"
+                    class="rounded-xl px-2 py-2 text-xs font-semibold transition" data-i18n="orderType.dineIn">Dine
+                    in</button>
+                <button type="button" data-order-type="takeaway"
+                    class="rounded-xl px-2 py-2 text-xs font-semibold transition"
+                    data-i18n="orderType.takeaway">Takeaway</button>
+                <button type="button" data-order-type="delivery"
+                    class="rounded-xl px-2 py-2 text-xs font-semibold transition"
+                    data-i18n="orderType.delivery">Delivery</button>
+            </div>
+
+            <div id="table-field-row" class="mb-3">
+                <label class="field-label" for="order-table" data-i18n="orderType.tableLabel">Table number</label>
+                <input id="order-table" class="field" inputmode="numeric"
+                    data-i18n-placeholder="orderType.tablePlaceholder" placeholder="e.g. 7" />
+            </div>
+
+            <div id="address-field-row" class="mb-3 hidden">
+                <label class="field-label" for="order-address" data-i18n="orderType.addressLabel">Delivery
+                    address</label>
+                <input id="order-address" class="field" data-i18n-placeholder="orderType.addressPlaceholder"
+                    placeholder="Street, building" />
+                <div id="delivery-progress-wrap" class="mt-3">
+                    <div class="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+                        <div id="delivery-progress"
+                            class="h-full w-0 rounded-full bg-brand transition-all duration-500"></div>
+                    </div>
+                    <p id="delivery-progress-text" class="mt-1.5 text-[11px] opacity-70"></p>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="field-label" for="order-notes" data-i18n="orderType.notesLabel">Notes for the
+                    kitchen</label>
+                <textarea id="order-notes" rows="2" class="field resize-none"
+                    data-i18n-placeholder="orderType.notesPlaceholder" placeholder="Allergies…"></textarea>
+            </div>
+
+            <!-- Totals -->
+            <dl class="space-y-2 text-sm">
+                <div class="flex items-center justify-between">
+                    <dt class="opacity-70" data-i18n="cart.subtotal">Subtotal</dt>
+                    <dd id="cart-subtotal" class="font-medium">—</dd>
+                </div>
+                <div id="cart-service-row" class="flex items-center justify-between">
+                    <dt class="opacity-70" data-i18n="cart.serviceCharge">Service (dine-in)</dt>
+                    <dd id="cart-service" class="font-medium">—</dd>
+                </div>
+                <div id="cart-delivery-row" class="hidden items-center justify-between">
+                    <dt class="opacity-70" data-i18n="cart.delivery">Delivery</dt>
+                    <dd id="cart-delivery" class="font-medium">—</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                    <dt class="opacity-70" data-i18n="cart.tax">Tax</dt>
+                    <dd id="cart-tax" class="font-medium">—</dd>
+                </div>
+                <div
+                    class="mt-2 flex items-center justify-between border-t border-black/10 pt-3 text-base dark:border-white/10">
+                    <dt class="font-semibold" data-i18n="cart.total">Total</dt>
+                    <dd id="cart-total" class="display text-xl font-bold">—</dd>
+                </div>
+            </dl>
+
+            <button type="button" id="cart-checkout"
+                class="btn-brand mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold shadow-xl shadow-brand/25">
+                <span data-i18n="cart.checkout">Go to checkout</span>
+                <span data-arrow-icon></span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================================================================
+       Checkout modal
+       ================================================================== -->
+    <div class="scrim" id="checkout-modal-scrim" data-scrim="checkout-modal"></div>
+    <div id="checkout-modal" class="modal fixed inset-0 z-[80]" aria-hidden="true">
+        <div class="absolute inset-0 grid place-items-center overflow-y-auto p-4">
+            <div class="glass-strong animate-pop relative w-full max-w-lg rounded-3xl p-6 shadow-2xl sm:p-8"
+                role="dialog" aria-modal="true" aria-labelledby="checkout-heading">
+                <button type="button"
+                    class="absolute end-4 top-4 grid h-9 w-9 place-items-center rounded-lg transition hover:bg-black/5 dark:hover:bg-white/10"
+                    data-close="checkout-modal" aria-label="Close" data-i18n-aria-label="common.close">
+                    <span data-close-icon></span>
+                </button>
+
+                <div id="checkout-body">
+                    <h2 id="checkout-heading" class="display pe-10 text-2xl font-bold" data-i18n="checkout.title">
+                        Checkout</h2>
+                    <p class="mt-2 text-sm opacity-70" data-i18n="checkout.subtitle"></p>
+
+                    <form id="checkout-form" novalidate class="mt-6 space-y-4">
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="field-label" for="co-name" data-i18n="checkout.nameLabel">Full
+                                    name</label>
+                                <input id="co-name" name="name" class="field" required
+                                    data-i18n-placeholder="checkout.namePlaceholder" />
+                            </div>
+                            <div>
+                                <label class="field-label" for="co-phone" data-i18n="checkout.phoneLabel">Phone</label>
+                                <input id="co-phone" name="phone" type="tel" class="field" required
+                                    data-i18n-placeholder="checkout.phonePlaceholder" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="field-label" for="co-email" data-i18n="checkout.emailLabel">Email
+                                (optional)</label>
+                            <input id="co-email" name="email" type="email" class="field"
+                                data-i18n-placeholder="checkout.emailPlaceholder" />
+                        </div>
+
+                        <div>
+                            <p class="field-label" data-i18n="checkout.paymentLabel">Payment method</p>
+                            <div id="payment-options" class="grid gap-2"></div>
+                            <p id="checkout-simulated-note" class="mt-2 hidden text-[11px] leading-snug opacity-60"
+                                data-i18n="checkout.simulatedNotice"></p>
+                        </div>
+
+                        <p id="checkout-error" class="field-error hidden" role="alert"></p>
+
+                        <button type="submit" id="checkout-submit"
+                            class="btn-brand inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold shadow-xl shadow-brand/25">
+                            <span data-i18n="checkout.placeOrder">Place order</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div id="checkout-success" class="hidden flex-col items-center gap-3 py-4 text-center">
+                    <span class="grid h-16 w-16 place-items-center rounded-full bg-emerald-500/15 text-emerald-500"
+                        data-check-icon></span>
+                    <h2 class="display text-2xl font-bold" data-i18n="checkout.successTitle">Order confirmed</h2>
+                    <p class="max-w-sm text-sm opacity-75" data-i18n="checkout.successBody"></p>
+                    <p class="glass mt-1 rounded-xl px-4 py-2 text-sm">
+                        <span class="opacity-60" data-i18n="checkout.reference">Reference</span>:
+                        <strong id="checkout-reference">—</strong>
+                    </p>
+                    <p id="checkout-gateway" class="text-xs opacity-60"></p>
+                    <button type="button" class="btn-brand mt-2 rounded-2xl px-6 py-3 text-sm font-semibold"
+                        data-close="checkout-modal" data-i18n="checkout.newOrder">
+                        Start a new order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-host" class="fixed bottom-5 left-1/2 z-[90] flex w-[min(92vw,26rem)] -translate-x-1/2 flex-col gap-2"
+        role="status" aria-live="polite"></div>
+
+    <!-- ===================================================================
+       Scripts — order matters. See the comments for the dependency chain.
+       ================================================================== -->
+    <script src="i18n/en.js"></script>
+    <script src="i18n/fr.js"></script>
+    <script src="i18n/am.js"></script>
+    <script src="i18n/es.js"></script>
+    <script src="assets/js/seed-data.js"></script>
+    <script src="assets/js/state.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script src="assets/js/payments.js"></script>
+    <script src="assets/js/qr.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

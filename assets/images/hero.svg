@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800"
+     preserveAspectRatio="xMidYMid slice" role="img" aria-label="Warm dining room illustration">
+  <defs>
+    <linearGradient id="room" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#131018"/>
+      <stop offset="0.55" stop-color="#241a15"/>
+      <stop offset="1" stop-color="#0b0b0f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.35" r="0.65">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity=".55"/>
+      <stop offset="0.55" stop-color="#f59e0b" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.82" cy="0.72" r="0.5">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e8" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#e6d6bd" stop-opacity=".7"/>
+    </linearGradient>
+    <pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.7" fill="#ffffff" fill-opacity=".05"/>
+      <circle cx="4" cy="4" r="0.6" fill="#ffffff" fill-opacity=".035"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#room)"/>
+  <rect width="1200" height="800" fill="url(#glow)"/>
+  <rect width="1200" height="800" fill="url(#glow2)"/>
+
+  <!-- pendant lights -->
+  <g stroke="#f0c98a" stroke-opacity=".5" stroke-width="3" fill="none">
+    <path d="M300 0v130M600 0v90M900 0v130"/>
+  </g>
+  <g fill="#ffd89b" fill-opacity=".22">
+    <circle cx="300" cy="150" r="62"/>
+    <circle cx="600" cy="110" r="44"/>
+    <circle cx="900" cy="150" r="62"/>
+  </g>
+  <g fill="#ffe9c4" fill-opacity=".8">
+    <circle cx="300" cy="150" r="16"/>
+    <circle cx="600" cy="110" r="12"/>
+    <circle cx="900" cy="150" r="16"/>
+  </g>
+
+  <!-- table -->
+  <ellipse cx="600" cy="640" rx="330" ry="86" fill="#000000" fill-opacity=".45"/>
+  <ellipse cx="600" cy="612" rx="320" ry="82" fill="#3a2a1e" fill-opacity=".85"/>
+  <ellipse cx="600" cy="600" rx="300" ry="74" fill="#5a4130" fill-opacity=".75"/>
+
+  <!-- hero plate -->
+  <ellipse cx="600" cy="588" rx="150" ry="52" fill="url(#plate)"/>
+  <ellipse cx="600" cy="584" rx="120" ry="40" fill="#f6ead4" fill-opacity=".75"/>
+  <ellipse cx="600" cy="578" rx="92" ry="29" fill="#2f6b4f" fill-opacity=".65"/>
+  <ellipse cx="600" cy="572" rx="60" ry="19" fill="#e0653f" fill-opacity=".7"/>
+  <ellipse cx="600" cy="568" rx="30" ry="10" fill="#f7d78a" fill-opacity=".85"/>
+
+  <!-- glasses -->
+  <g fill-opacity=".55" stroke="#ffffff" stroke-opacity=".35" stroke-width="2">
+    <path d="M330 512l26 0 6 78a19 19 0 0 1-38 0z" fill="#8a2b3c"/>
+    <path d="M856 512l26 0 6 78a19 19 0 0 1-38 0z" fill="#2f5d6b"/>
+  </g>
+
+  <!-- cutlery -->
+  <g stroke="#e9dcc6" stroke-opacity=".7" stroke-width="6" stroke-linecap="round">
+    <path d="M432 528v70M418 528v22a14 14 0 0 0 28 0v-22"/>
+    <path d="M770 528v70M760 528v22M780 528v22"/>
+  </g>
+
+  <rect width="1200" height="800" fill="url(#grain)"/>
+</svg>
