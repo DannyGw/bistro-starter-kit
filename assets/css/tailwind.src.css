@@ -4,8 +4,60 @@
    `npm run build:css` turns this into assets/css/tailwind.css, which is what
    the pages actually load. Hand-written component styles live in styles.css and
    load *after* the compiled utilities so they can override them.
+
+   The `.field` control family is the one exception: it belongs in the
+   components layer so the utilities in the markup can still tune it. The markup
+   relies on that — `ps-9`/`pe-7`/`ps-11` reserve room for the leading icon,
+   `pe-8` keeps the sort arrow off the text, plus `py-2`, `text-sm` and `w-40`.
+   At equal specificity the later stylesheet wins, so while `.field` lived in
+   styles.css every one of those utilities was silently dead and the search and
+   language icons rendered on top of their own text.
    ========================================================================== */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .field {
+    width: 100%;
+    padding: 0.72rem 0.95rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgb(var(--line) / 0.14);
+    background-color: rgb(var(--surface) / 0.72);
+    color: rgb(var(--ink));
+    font: inherit;
+    transition: border-color 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
+  }
+
+  .field::placeholder {
+    color: rgb(var(--ink-muted));
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 var(--ring-width) var(--brand-soft);
+  }
+
+  .field[aria-invalid='true'] {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 var(--ring-width) rgb(239 68 68 / 0.18);
+  }
+
+  .field-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgb(var(--ink-muted));
+  }
+
+  .field-error {
+    margin-top: 0.3rem;
+    font-size: 0.78rem;
+    color: #ef4444;
+  }
+}

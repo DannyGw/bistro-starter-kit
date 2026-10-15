@@ -1,9 +1,12 @@
 /* ==========================================================================
    Bistro Starter Kit — custom styling extensions
    --------------------------------------------------------------------------
-   Tailwind (CDN, configured inline in the HTML) supplies the utility layer.
-   This file supplies the things utilities are bad at: brand tokens, the
-   glassmorphism surfaces, drawer/modal motion, and accessibility fallbacks.
+   Tailwind supplies the utility layer, compiled into assets/css/tailwind.css by
+   `npm run build:css`. This file loads after those utilities and supplies the
+   things utilities are bad at: brand tokens, the glassmorphism surfaces,
+   drawer/modal motion, and accessibility fallbacks. The `.field` control family
+   is the exception — it lives in the compiled components layer so utilities can
+   still tune it (see tailwind.src.css).
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -321,48 +324,12 @@ html.js .reveal.is-visible {
 
 /* --------------------------------------------------------------------------
    7. Forms
+   The `.field` control family lives in tailwind.src.css under
+   `@layer components`. It cannot live here: this file loads after the compiled
+   utilities, so at equal specificity `.field`'s `padding`/`font` shorthands
+   silently beat the `ps-*`/`pe-*`/`py-2`/`text-sm` utilities that position the
+   leading icons and the sort arrow.
    -------------------------------------------------------------------------- */
-.field {
-  width: 100%;
-  padding: 0.72rem 0.95rem;
-  border-radius: var(--radius-md);
-  border: 1px solid rgb(var(--line) / 0.14);
-  background-color: rgb(var(--surface) / 0.72);
-  color: rgb(var(--ink));
-  font: inherit;
-  transition: border-color 0.2s var(--ease-smooth), box-shadow 0.2s var(--ease-smooth);
-}
-
-.field::placeholder {
-  color: rgb(var(--ink-muted));
-}
-
-.field:focus {
-  outline: none;
-  border-color: var(--brand);
-  box-shadow: 0 0 0 var(--ring-width) var(--brand-soft);
-}
-
-.field[aria-invalid='true'] {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 var(--ring-width) rgb(239 68 68 / 0.18);
-}
-
-.field-label {
-  display: block;
-  margin-bottom: 0.35rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: rgb(var(--ink-muted));
-}
-
-.field-error {
-  margin-top: 0.3rem;
-  font-size: 0.78rem;
-  color: #ef4444;
-}
 
 /* Native pickers inside a dark UI */
 html.dark input[type='date'],
