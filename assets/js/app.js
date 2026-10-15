@@ -303,7 +303,7 @@
                 return item.available !== false;
             }).length;
             dom['menu-results'].textContent = rows.length
-                ? t('menu.results', { count: sellable })
+                ? I18N.plural('menu.results', sellable)
                 : '';
         }
         UI.reveal('#menu-grid .reveal');
@@ -585,8 +585,19 @@
         return date.toISOString().slice(0, 10);
     }
 
+    /**
+     * (Re)build the reservation date window, time slots and party sizes.
+     * Idempotent on purpose: it runs on boot, after a booking, and on every
+     * language change (the party-size labels are translated), so it preserves
+     * whatever the guest had already picked.
+     */
     function buildReservationOptions() {
         var settings = CONFIG.reservations;
+        var previous = {
+            date: dom['res-date'] ? dom['res-date'].value : '',
+            time: dom['res-time'] ? dom['res-time'].value : '',
+            guests: dom['res-guests'] ? dom['res-guests'].value : ''
+        };
 
         // Date window
         var today = new Date();
@@ -595,7 +606,7 @@
         if (dom['res-date']) {
             dom['res-date'].min = isoDate(today);
             dom['res-date'].max = isoDate(last);
-            if (!dom['res-date'].value) dom['res-date'].value = isoDate(today);
+            dom['res-date'].value = previous.date || isoDate(today);
         }
 
         // Time slots
@@ -610,20 +621,31 @@
                     return '<option value="' + slot + '">' + slot + '</option>';
                 })
                 .join('');
-            dom['res-time'].value = slots.indexOf('19:00') !== -1 ? '19:00' : slots[0];
+            dom['res-time'].value =
+                slots.indexOf(previous.time) !== -1
+                    ? previous.time
+                    : slots.indexOf('19:00') !== -1
+                        ? '19:00'
+                        : slots[0];
         }
 
         // Party sizes
         if (dom['res-guests']) {
+            var min = settings.minPartySize || 1;
+            var max = settings.maxPartySize || 12;
             var options = [];
-            for (var count = settings.minPartySize || 1; count <= (settings.maxPartySize || 12); count += 1) {
+            for (var count = min; count <= max; count += 1) {
                 options.push(
-                    '<option value="' + count + '"' + (count === 2 ? ' selected' : '') + '>' +
-                    UI.escapeHtml(t('res.guestsOption', { count: count })) +
+                    '<option value="' + count + '">' +
+                    UI.escapeHtml(I18N.plural('res.guestsOption', count)) +
                     '</option>'
                 );
             }
             dom['res-guests'].innerHTML = options.join('');
+
+            var guests = parseInt(previous.guests, 10);
+            if (!Number.isFinite(guests) || guests < min || guests > max) guests = 2;
+            dom['res-guests'].value = String(guests);
         }
     }
 
@@ -1030,6 +1052,8 @@
         renderGallery();
         renderReviews();
         renderStats();
+        // Party-size labels are translated, so rebuild them on a language switch.
+        buildReservationOptions();
         syncLanguageSelectors();
     }
 
@@ -1055,6 +1079,12 @@
         UI.applyBrand();
         injectIcons();
         applyThemeFromState();
+
+        // Apply the guest's saved language (or the configured default) *before*
+        // anything renders, so the static markup and the dynamically rendered
+        // menu/cart agree on the language from the first paint.
+        I18N.setLanguage(State.get('lang') || CONFIG.locale.default);
+
         buildLanguageSelectors();
         UI.overlay.bind(document);
 

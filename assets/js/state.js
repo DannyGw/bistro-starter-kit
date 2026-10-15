@@ -4,7 +4,7 @@
  * A tiny observable store: no framework, no build step.
  *
  *   Bistro.State.subscribe(function (state, meta) { ... });
- *   Bistro.State.patch({ lang: 'fr' });
+ *   Bistro.State.patch({ lang: 'am' });
  *   Bistro.State.get().cart;
  *
  * Design notes

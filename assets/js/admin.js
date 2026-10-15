@@ -427,7 +427,7 @@
             '</div>' +
             '<div>' +
             '<p class="text-[11px] uppercase tracking-wider opacity-55">' + UI.escapeHtml(t('res.guestsLabel')) + '</p>' +
-            '<p class="mt-1 font-medium">' + UI.escapeHtml(t('res.guestsOption', { count: booking.guests })) + '</p>' +
+            '<p class="mt-1 font-medium">' + UI.escapeHtml(I18N.plural('res.guestsOption', booking.guests)) + '</p>' +
             '</div>' +
             '<div>' +
             '<p class="text-[11px] uppercase tracking-wider opacity-55">' + UI.escapeHtml(t('res.notesLabel')) + '</p>' +
@@ -711,6 +711,10 @@
         UI.applyTheme(theme);
 
         buildLanguageSelect();
+
+        // Apply the staff member's saved language before the dashboard renders.
+        I18N.setLanguage(State.get('lang') || CONFIG.locale.default);
+
         UI.overlay.bind(document);
 
         // Surface the demo passcode so a fresh clone is usable — this is a

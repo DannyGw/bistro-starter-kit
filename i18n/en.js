@@ -1,7 +1,7 @@
 /**
  * Bistro Starter Kit — English dictionary (source of truth).
  * ---------------------------------------------------------------------------
- * Add a key here first, then mirror it into fr.js / am.js / es.js.
+ * Add a key here first, then mirror it into am.js.
  * Missing keys fall back to this file, then to the raw key (with a console
  * warning in development).
  * ---------------------------------------------------------------------------
@@ -62,7 +62,8 @@ window.BistroI18N.en = {
         featured: 'Chef’s pick',
         prep: '{minutes} min prep',
         ratingSummary: '{rating} · {count} reviews',
-        results: '{count} dishes',
+        results_one: '{count} dish',
+        results_other: '{count} dishes',
         loading: 'Loading the menu…'
     },
 
@@ -96,7 +97,8 @@ window.BistroI18N.en = {
         remove: 'Remove {name}',
         decrease: 'Decrease quantity of {name}',
         increase: 'Increase quantity of {name}',
-        items: '{count} items',
+        items_one: '{count} item',
+        items_other: '{count} items',
         free: 'free',
         freeDeliveryProgress: 'Spend {amount} more for free delivery',
         freeDeliveryReached: 'Free delivery unlocked',
@@ -155,7 +157,8 @@ window.BistroI18N.en = {
         dateLabel: 'Date',
         timeLabel: 'Time',
         guestsLabel: 'Guests',
-        guestsOption: '{count} guests',
+        guestsOption_one: '{count} guest',
+        guestsOption_other: '{count} guests',
         notesLabel: 'Special requests',
         notesPlaceholder: 'Birthday, window table, high chair…',
         submit: 'Request booking',

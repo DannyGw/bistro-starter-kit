@@ -47,7 +47,7 @@ create table if not exists public.menu_items (
   review_count integer not null default 0,
   sort_order   integer not null default 0,
   -- Optional per-language overrides, e.g.
-  --   {"fr": {"name": "…", "description": "…"}, "am": { … }}
+  --   {"am": {"name": "…", "description": "…"}}
   translations jsonb,
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()

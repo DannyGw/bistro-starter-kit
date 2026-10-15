@@ -65,9 +65,7 @@
              */
             available: [
                 { code: 'en', label: 'English', native: 'English', dir: 'ltr' },
-                { code: 'fr', label: 'French', native: 'Français', dir: 'ltr' },
-                { code: 'am', label: 'Amharic', native: 'አማርኛ', dir: 'ltr' },
-                { code: 'es', label: 'Spanish', native: 'Español', dir: 'ltr' }
+                { code: 'am', label: 'Amharic', native: 'አማርኛ', dir: 'ltr' }
             ],
             allowUserSwitch: true,
             currency: { USD: { symbol: '$', decimals: 2 }, ETB: { symbol: 'Br', decimals: 2 } },

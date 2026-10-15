@@ -25,7 +25,7 @@
     var DICTS = global.BistroI18N || {};
 
     /** Maps a config locale code onto a CLDR tag for Intl formatting. */
-    var INTL_TAGS = { en: 'en-US', fr: 'fr-FR', am: 'am-ET', es: 'es-ES' };
+    var INTL_TAGS = { en: 'en-US', am: 'am-ET' };
 
     var missing = {};
 
@@ -78,6 +78,66 @@
 
         return value.replace(/\{(\w+)\}/g, function (match, token) {
             return Object.prototype.hasOwnProperty.call(vars, token) ? String(vars[token]) : match;
+        });
+    }
+
+    /** Cached Intl.PluralRules, keyed by locale tag. */
+    var pluralRules = {};
+
+    function pluralCategory(count, lang) {
+        var tag = INTL_TAGS[lang || currentLanguage()] || INTL_TAGS.en;
+        if (!global.Intl || typeof global.Intl.PluralRules !== 'function') return 'other';
+        if (!pluralRules[tag]) pluralRules[tag] = new global.Intl.PluralRules(tag);
+        try {
+            return pluralRules[tag].select(Number(count));
+        } catch (err) {
+            return 'other';
+        }
+    }
+
+    /**
+     * Translate a count-bearing key using CLDR plural rules, so "1 dish" never
+     * renders as "1 dishes".
+     *
+     * Dictionaries supply one entry per plural category:
+     *   results_one:   '{count} dish'
+     *   results_other: '{count} dishes'
+     *
+     * Lookup falls back to `<key>_other`, then to the bare `<key>`, so adding
+     * plurals to an existing string is always backwards compatible. `count` is
+     * injected into the placeholders automatically; languages whose rules differ
+     * (Amharic treats 0 and 1 alike) are handled by Intl rather than by hand.
+     *
+     * @param {string} key e.g. 'menu.results'
+     * @param {number} count drives the category and fills `{count}`
+     * @param {object} [vars] extra interpolation values
+     */
+    function plural(key, count, vars) {
+        var active = currentLanguage();
+        var candidates = [key + '_' + pluralCategory(count, active), key + '_other', key];
+        var value;
+
+        for (var i = 0; i < candidates.length; i += 1) {
+            value = resolve(active, candidates[i]);
+            if (value === undefined && active !== CONFIG.locale.fallback) {
+                value = resolve(CONFIG.locale.fallback, candidates[i]);
+            }
+            if (value !== undefined) break;
+        }
+
+        if (value === undefined) {
+            if (!missing[key]) {
+                missing[key] = true;
+                console.warn('[Bistro.I18N] Missing plural translation: ' + key);
+            }
+            return key;
+        }
+
+        return value.replace(/\{(\w+)\}/g, function (match, token) {
+            if (token === 'count') return String(count);
+            return vars && Object.prototype.hasOwnProperty.call(vars, token)
+                ? String(vars[token])
+                : match;
         });
     }
 
@@ -225,6 +285,7 @@
 
     Bistro.I18N = {
         t: t,
+        plural: plural,
         apply: apply,
         setLanguage: setLanguage,
         onLanguageChange: onLanguageChange,
