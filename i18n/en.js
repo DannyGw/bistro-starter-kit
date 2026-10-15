@@ -163,6 +163,7 @@ window.BistroI18N.en = {
         notesPlaceholder: 'Birthday, window table, high chair…',
         submit: 'Request booking',
         submitting: 'Sending request…',
+        again: 'Book another table',
         successTitle: 'Table requested',
         successBody: 'We have your request and will confirm shortly.',
         reference: 'Booking reference',
@@ -326,6 +327,7 @@ window.BistroI18N.en = {
         },
         resetDone: 'Demo data reset.',
         statusChanged: 'Status updated.',
-        refreshDone: 'Refreshed.'
+        refreshDone: 'Refreshed.',
+        largeParty: 'Large party'
     }
 };

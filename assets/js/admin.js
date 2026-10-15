@@ -410,7 +410,7 @@
             statusPill(booking.status) +
             (large
                 ? '<span class="rounded-full bg-amber-400/15 px-2.5 py-1 text-[11px] font-bold uppercase text-amber-600 dark:text-amber-400">' +
-                UI.escapeHtml(t('admin.action.approve')) + '</span>'
+                UI.escapeHtml(t('admin.largeParty')) + '</span>'
                 : '') +
             '<span class="ms-auto text-xs opacity-60">' +
             UI.escapeHtml(I18N.formatDate(booking.date, { day: 'numeric', month: 'short', year: 'numeric' })) +

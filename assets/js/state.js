@@ -212,7 +212,7 @@
 
         var changed = [];
         Object.keys(patchObj).forEach(function (key) {
-            if (!shallowEqual(state[key], patchObj[key])) changed.push(key);
+            if (!valuesEqual(state[key], patchObj[key])) changed.push(key);
             state[key] = patchObj[key];
         });
 
@@ -249,12 +249,27 @@
         return get();
     }
 
-    function shallowEqual(a, b) {
+    /**
+     * Compare two stored values by value.
+     *
+     * Comparing arrays by length alone is tempting and wrong: bumping a cart
+     * line's quantity yields a new array of the *same* length, and that change
+     * still has to be persisted and broadcast. Stored values are small (a cart,
+     * a menu, a couple of hundred orders), so the cost of a structural compare is
+     * negligible next to the re-render it avoids.
+     */
+    function valuesEqual(a, b) {
         if (a === b) return true;
-        if (typeof a !== 'object' || typeof b !== 'object' || !a || !b) return false;
+        if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) {
+            return false;
+        }
         if (Array.isArray(a) !== Array.isArray(b)) return false;
-        if (Array.isArray(a)) return a.length === b.length;
-        return false;
+        try {
+            return JSON.stringify(a) === JSON.stringify(b);
+        } catch (err) {
+            // Cyclic or otherwise unserialisable — assume it changed.
+            return false;
+        }
     }
 
     /* ------------------------------------------------------------------ *

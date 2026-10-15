@@ -249,6 +249,7 @@
         node.removeAttribute('aria-hidden');
         node.removeAttribute('inert');
         document.body.classList.add('is-locked');
+        setExpanded(id, true);
 
         var scrim = document.getElementById(id + '-scrim');
         if (scrim) scrim.classList.add('is-open');
@@ -264,11 +265,23 @@
         if (!node) return;
         node.classList.remove('is-open');
         node.setAttribute('aria-hidden', 'true');
+        // `aria-hidden` alone leaves the contents tabbable, which strands keyboard
+        // focus inside an invisible drawer. `inert` removes it from the tab order
+        // and from the accessibility tree in one go.
+        node.setAttribute('inert', '');
+        setExpanded(id, false);
 
         var scrim = document.getElementById(id + '-scrim');
         if (scrim) scrim.classList.remove('is-open');
 
         if (!document.querySelector('.drawer.is-open')) document.body.classList.remove('is-locked');
+    }
+
+    /** Mirror an overlay's state onto whatever `[data-open="id"]` button opened it. */
+    function setExpanded(id, expanded) {
+        $$('[data-open="' + id + '"]').forEach(function (button) {
+            button.setAttribute('aria-expanded', String(Boolean(expanded)));
+        });
     }
 
     function closeAll() {

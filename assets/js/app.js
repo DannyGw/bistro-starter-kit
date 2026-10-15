@@ -373,6 +373,8 @@
         toggle(dom['cart-empty'], empty, 'flex');
         toggle(dom['cart-footer'], !empty);
         toggle(dom['cart-items'], !empty);
+        // "Clear" on an empty order only produces a confusing toast.
+        toggle(dom['cart-clear'], !empty);
 
         if (dom['cart-count']) dom['cart-count'].textContent = String(totals.itemCount);
 
@@ -970,7 +972,15 @@
         if (dom['reservation-form']) dom['reservation-form'].addEventListener('submit', submitReservation);
         if (dom['res-again']) {
             dom['res-again'].addEventListener('click', function () {
-                dom['reservation-form'].reset();
+                // form.reset() would snap the selects to their *first* option
+                // (11:00, 1 guest). Clear the text fields by hand and let
+                // buildReservationOptions() re-apply the real defaults.
+                ['res-name', 'res-phone', 'res-email', 'res-notes'].forEach(function (id) {
+                    if (dom[id]) dom[id].value = '';
+                });
+                if (dom['res-guests']) dom['res-guests'].value = '';
+                if (dom['res-time']) dom['res-time'].value = '';
+                if (dom['res-date']) dom['res-date'].value = '';
                 buildReservationOptions();
                 hide(dom['res-success'], 'flex');
                 show(dom['reservation-form']);

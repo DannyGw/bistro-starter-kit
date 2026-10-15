@@ -112,7 +112,8 @@
 
                 <button type="button"
                     class="btn-brand inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold shadow-lg shadow-brand/25"
-                    data-open="cart-drawer" data-i18n-aria-label="cart.open" aria-label="Open your order">
+                    data-open="cart-drawer" aria-controls="cart-drawer" aria-expanded="false"
+                    data-i18n-aria-label="cart.open" aria-label="Open your order">
                     <span data-cart-icon></span>
                     <span class="hidden sm:inline" data-i18n="cart.title">Your order</span>
                     <span id="cart-count"
@@ -121,7 +122,8 @@
 
                 <button type="button" id="nav-toggle"
                     class="grid h-10 w-10 place-items-center rounded-xl border border-black/10 bg-white/60 transition hover:bg-white/90 lg:hidden dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-                    data-open="mobile-nav" data-i18n-aria-label="nav.openMenu" aria-label="Open navigation">
+                    data-open="mobile-nav" aria-controls="mobile-nav" aria-expanded="false"
+                    data-i18n-aria-label="nav.openMenu" aria-label="Open navigation">
                     <span data-nav-icon></span>
                 </button>
             </div>
@@ -130,7 +132,7 @@
 
     <!-- Mobile navigation drawer (left) -->
     <div class="scrim" id="mobile-nav-scrim" data-scrim="mobile-nav"></div>
-    <aside id="mobile-nav" class="drawer drawer-left glass-strong" aria-hidden="true" aria-label="Navigation">
+    <aside id="mobile-nav" class="drawer drawer-left glass-strong" aria-hidden="true" inert aria-label="Navigation">
         <div class="flex items-center justify-between border-b border-black/5 px-5 py-4 dark:border-white/10">
             <span class="display text-lg font-bold" data-brand="name">Bistro</span>
             <button type="button"
@@ -393,8 +395,8 @@
                         </p>
                         <button type="button" id="res-again"
                             class="mt-1 rounded-xl border border-current/20 px-5 py-2.5 text-sm font-semibold"
-                            data-i18n="checkout.newOrder">
-                            Start a new order
+                            data-i18n="res.again">
+                            Book another table
                         </button>
                     </div>
                 </div>
@@ -568,7 +570,7 @@
        Cart drawer
        ================================================================== -->
     <div class="scrim" id="cart-drawer-scrim" data-scrim="cart-drawer"></div>
-    <aside id="cart-drawer" class="drawer glass-strong" aria-hidden="true" role="dialog" aria-modal="true"
+    <aside id="cart-drawer" class="drawer glass-strong" aria-hidden="true" inert role="dialog" aria-modal="true"
         aria-labelledby="cart-heading">
         <div class="flex items-center justify-between border-b border-black/5 px-5 py-4 dark:border-white/10">
             <h2 id="cart-heading" class="display text-lg font-bold" data-i18n="cart.title">Your order</h2>

@@ -160,6 +160,7 @@ window.BistroI18N.am = {
         notesPlaceholder: 'የልደት ቀን፣ ከመስኮት አጠገብ፣ የልጅ ወንበር…',
         submit: 'ቦታ ይጠይቁ',
         submitting: 'ጥያቄ በመላክ ላይ…',
+        again: 'አዲስ ቦታ ያስይዙ',
         successTitle: 'ጠረጴዛ ተጠይቋል',
         successBody: 'ጥያቄዎን ተቀብለናል፤ በቅርቡ እናረጋግጣለን።',
         reference: 'የቦታ ማስያዣ ማጣቀሻ',
@@ -323,6 +324,7 @@ window.BistroI18N.am = {
         },
         resetDone: 'የማሳያ መረጃ ተጸድቷል።',
         statusChanged: 'ሁኔታው ተሻሽሏል።',
-        refreshDone: 'ተደስቷል።'
+        refreshDone: 'ተደስቷል።',
+        largeParty: 'ትልቅ ቡድን'
     }
 };

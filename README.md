@@ -18,7 +18,7 @@
 - **📊 Integrated Admin Dashboard**: Manage live incoming orders, approve or cancel table reservations, and toggle menu stock statuses in real time.
 - **💳 Multi-Gateway Payment System**: Built-in support for global and regional checkout processors including **Stripe**, **PayPal**, and **Chapa**.
 - **🔌 Backend & CMS Persistence**: Connected via Supabase / Firebase for live synchronization of menus, orders, and reservations across devices.
-- **🌐 Multi-Language Support (i18n)**: Out-of-the-box language switcher supporting English, French, Amharic, Spanish, and more.
+- **🌐 Multi-Language Support (i18n)**: Out-of-the-box language switcher supporting English and Amharic.
 - **📱 QR Code Table Ordering**: Generate and utilize table-specific QR codes for frictionless, direct-to-table dine-in ordering.
 
 ---
@@ -39,7 +39,7 @@
 ├── index.html            # Main single-page application entry point
 ├── config.js             # Client configuration, branding, and feature flags
 ├── admin.html            # Real-time restaurant management dashboard
-├── i18n/                 # Translation dictionary files (en, am, fr, es)
+├── i18n/                 # Translation dictionary files (en, am)
 ├── assets/
 │   ├── css/              # Custom styling extensions
 │   ├── js/               # Core state management, cart logic, and API hooks

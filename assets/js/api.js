@@ -697,6 +697,26 @@
      * Facade
      * ==================================================================== */
 
+    /**
+     * Turn a synchronous throw into a rejected promise.
+     *
+     * The adapters validate their input before doing any async work, so a bad
+     * call throws immediately. Callers compose these methods into promise chains
+     * (`api.createOrder(...).catch(...)`), and a synchronous throw would sail
+     * straight past that `.catch()`. Wrapping keeps the contract: every API
+     * method returns a promise, and every failure arrives as a rejection.
+     */
+    function guard(fn) {
+        return function () {
+            var args = arguments;
+            try {
+                return Promise.resolve(fn.apply(null, args));
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        };
+    }
+
     var adapter = CONFIG.isBackendConfigured() ? supabaseAdapter() : localAdapter;
 
     Bistro.API = {
@@ -714,30 +734,30 @@
         listMenu: function (options) {
             return adapter.listMenu(options);
         },
-        setMenuAvailability: function (id, available) {
+        setMenuAvailability: guard(function (id, available) {
             return adapter.setMenuAvailability(id, available);
-        },
-        saveMenuItem: function (item) {
+        }),
+        saveMenuItem: guard(function (item) {
             return adapter.saveMenuItem(item);
-        },
-        createOrder: function (order) {
+        }),
+        createOrder: guard(function (order) {
             return adapter.createOrder(order);
-        },
+        }),
         listOrders: function (options) {
             return adapter.listOrders(options);
         },
-        updateOrderStatus: function (id, status) {
+        updateOrderStatus: guard(function (id, status) {
             return adapter.updateOrderStatus(id, status);
-        },
-        createReservation: function (booking) {
+        }),
+        createReservation: guard(function (booking) {
             return adapter.createReservation(booking);
-        },
+        }),
         listReservations: function (options) {
             return adapter.listReservations(options);
         },
-        updateReservationStatus: function (id, status) {
+        updateReservationStatus: guard(function (id, status) {
             return adapter.updateReservationStatus(id, status);
-        },
+        }),
         subscribe: function (fn) {
             return adapter.subscribe(fn);
         },

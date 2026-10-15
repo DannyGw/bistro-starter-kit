@@ -187,9 +187,19 @@ svg {
   z-index: 70;
   display: flex;
   flex-direction: column;
-    /* The drawer itself never scrolls; an inner region does, so the header and
-       the sticky footer stay put on short viewports. */
-    overflow: hidden;
+  /* The drawer itself never scrolls; an inner region does, so the header stays
+     put and the checkout button stays reachable on short viewports. */
+  overflow: hidden;
+}
+
+.drawer-left {
+  inset: 0 auto 0 0;
+  transform: translateX(-102%);
+}
+
+/* Must follow `.drawer` and `.drawer-left` so the open state wins the cascade. */
+.drawer.is-open {
+  transform: translateX(0);
 }
 
 .scrim {

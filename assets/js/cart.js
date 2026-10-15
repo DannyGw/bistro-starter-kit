@@ -136,6 +136,26 @@
      * Service charge applies to dine-in; delivery fee to delivery (free above
      * `order.freeDeliveryThreshold`); tax is charged on the post-fee subtotal.
      */
+    /**
+     * The subset of `totals()` worth persisting with an order.
+     * `totals()` also carries UI-only helpers (free-delivery progress, and the
+     * thresholds behind it) which have no business in the database row or in the
+     * receipt the admin page renders.
+     */
+    function orderTotals() {
+        var all = totals();
+        return {
+            currency: all.currency,
+            itemCount: all.itemCount,
+            subtotal: all.subtotal,
+            serviceCharge: all.serviceCharge,
+            delivery: all.delivery,
+            tax: all.tax,
+            taxRate: all.taxRate,
+            total: all.total
+        };
+    }
+
     function totals() {
         var sub = subtotal();
         var type = orderType();
@@ -216,7 +236,7 @@
                     tags: line.tags || []
                 };
             }),
-            totals: totals(),
+            totals: orderTotals(),
             notes: State.get('orderNotes', ''),
             payment: payment || null
         };
