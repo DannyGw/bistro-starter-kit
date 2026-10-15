@@ -291,7 +291,10 @@ html.js .reveal {
   transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
 }
 
-.reveal.is-visible {
+/* Must repeat the `html.js` prefix: `html.js .reveal` is (0,2,1) and would
+   otherwise out-specify a bare `.reveal.is-visible` (0,2,0), leaving every
+   revealed element stuck at opacity 0. */
+html.js .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
